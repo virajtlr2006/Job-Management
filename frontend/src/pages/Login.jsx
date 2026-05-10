@@ -4,81 +4,73 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const set = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    const result = await login(formData.email, formData.password);
-
+    const result = await login(form.email, form.password);
     if (result.success) {
-      toast.success('Login successful!');
+      toast.success('Welcome back!');
       navigate('/');
     } else {
       toast.error(result.message);
     }
-
     setLoading(false);
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <h1 className="text-3xl font-semibold text-white text-center mb-8">Login</h1>
+    <div className="flex min-h-[70vh] items-center justify-center">
+      <div className="w-full max-w-sm space-y-8 fade-up">
 
-      <form onSubmit={handleSubmit} className="surface-card p-8 space-y-6">
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="input-field"
-          />
+        {/* Logo mark */}
+        <div className="text-center space-y-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--accent)]">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 15L10 5L16 15" stroke="#0c0c0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 11H14" stroke="#0c0c0b" strokeWidth="2.5" strokeLinecap="round"/>
+            </svg>
+          </div>
+          <h1 className="font-display text-3xl text-white">Welcome back</h1>
+          <p className="text-sm text-zinc-500">Sign in to your JobHub account</p>
         </div>
 
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="input-field"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="card p-7 space-y-5">
+          <div className="space-y-2">
+            <label className="form-label">Email</label>
+            <input
+              type="email" name="email" value={form.email} onChange={set}
+              required className="field" placeholder="you@example.com"
+              autoComplete="email"
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn-primary py-3 disabled:opacity-50"
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+          <div className="space-y-2">
+            <label className="form-label">Password</label>
+            <input
+              type="password" name="password" value={form.password} onChange={set}
+              required className="field" placeholder="••••••••"
+              autoComplete="current-password"
+            />
+          </div>
 
-      <p className="text-center mt-4 text-slate-400">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-cyan-400 hover:text-cyan-300">
-          Register here
-        </Link>
-      </p>
+          <button type="submit" disabled={loading} className="btn-accent w-full py-3 text-[15px] mt-2">
+            {loading ? 'Signing in…' : 'Sign in'}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-zinc-600">
+          Don't have an account?{' '}
+          <Link to="/register" className="text-zinc-300 hover:text-white transition-colors font-medium">
+            Create one
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

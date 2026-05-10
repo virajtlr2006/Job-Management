@@ -3,143 +3,117 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
+const RoleCard = ({ value, current, onChange, icon, title, desc }) => (
+  <button
+    type="button"
+    onClick={() => onChange(value)}
+    className={`flex-1 text-left p-4 rounded-2xl border transition-all duration-150 ${
+      current === value
+        ? 'border-[var(--accent-border)] bg-[var(--accent-dim)]'
+        : 'border-white/[0.07] bg-zinc-900/50 hover:border-white/[0.12]'
+    }`}
+  >
+    <div className="text-xl mb-2">{icon}</div>
+    <p className={`font-semibold text-sm mb-0.5 ${current === value ? 'text-[var(--accent)]' : 'text-zinc-200'}`}>{title}</p>
+    <p className="text-xs text-zinc-600">{desc}</p>
+  </button>
+);
+
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'jobseeker',
+  const [form, setForm] = useState({
+    name: '', email: '', password: '', confirmPassword: '', role: 'jobseeker',
   });
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const set = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
+    if (form.password !== form.confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
-
     setLoading(true);
-
-    const result = await register(formData.name, formData.email, formData.password, formData.role);
-
+    const result = await register(form.name, form.email, form.password, form.role);
     if (result.success) {
-      toast.success('Registration successful!');
+      toast.success('Account created!');
       navigate('/');
     } else {
       toast.error(result.message);
     }
-
     setLoading(false);
   };
 
   return (
-    <div className="max-w-md mx-auto">
-      <h1 className="text-3xl font-semibold text-white text-center mb-8">Register</h1>
+    <div className="flex min-h-[80vh] items-center justify-center py-12">
+      <div className="w-full max-w-sm space-y-8 fade-up">
 
-      <form onSubmit={handleSubmit} className="surface-card p-8 space-y-6">
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Full Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="input-field"
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="input-field"
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="input-field"
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">Confirm Password</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-            className="input-field"
-          />
-        </div>
-
-        <div>
-          <label className="block text-slate-300 font-semibold mb-2">I am a</label>
-          <div className="space-x-4 text-slate-300">
-            <label className="inline-flex items-center gap-2">
-              <input
-                type="radio"
-                name="role"
-                value="jobseeker"
-                checked={formData.role === 'jobseeker'}
-                onChange={handleChange}
-                className="accent-cyan-400"
-              />
-              Job Seeker
-            </label>
-            <label className="inline-flex items-center gap-2">
-              <input
-                type="radio"
-                name="role"
-                value="employer"
-                checked={formData.role === 'employer'}
-                onChange={handleChange}
-                className="accent-cyan-400"
-              />
-              Employer
-            </label>
+        <div className="text-center space-y-2">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--accent)]">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M4 15L10 5L16 15" stroke="#0c0c0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 11H14" stroke="#0c0c0b" strokeWidth="2.5" strokeLinecap="round"/>
+            </svg>
           </div>
+          <h1 className="font-display text-3xl text-white">Create account</h1>
+          <p className="text-sm text-zinc-500">Join JobHub — it takes 30 seconds</p>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn-primary py-3 disabled:opacity-50"
-        >
-          {loading ? 'Registering...' : 'Register'}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className="card p-7 space-y-5">
 
-      <p className="text-center mt-4 text-slate-400">
-        Already have an account?{' '}
-        <Link to="/login" className="text-cyan-400 hover:text-cyan-300">
-          Login here
-        </Link>
-      </p>
+          {/* Role picker */}
+          <div className="space-y-2">
+            <label className="form-label">I am a</label>
+            <div className="flex gap-3">
+              <RoleCard
+                value="jobseeker" current={form.role}
+                onChange={r => setForm(f => ({ ...f, role: r }))}
+                icon="🔍" title="Job seeker"
+                desc="Looking for my next role"
+              />
+              <RoleCard
+                value="employer" current={form.role}
+                onChange={r => setForm(f => ({ ...f, role: r }))}
+                icon="🏢" title="Employer"
+                desc="Hiring for my company"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="form-label">Full name</label>
+            <input name="name" value={form.name} onChange={set} required className="field" placeholder="Jane Smith" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="form-label">Email</label>
+            <input type="email" name="email" value={form.email} onChange={set} required className="field" placeholder="you@example.com" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="form-label">Password</label>
+            <input type="password" name="password" value={form.password} onChange={set} required className="field" placeholder="Min. 8 characters" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="form-label">Confirm password</label>
+            <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={set} required className="field" placeholder="••••••••" />
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-accent w-full py-3 text-[15px] mt-1">
+            {loading ? 'Creating account…' : 'Create account'}
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-zinc-600">
+          Already have an account?{' '}
+          <Link to="/login" className="text-zinc-300 hover:text-white transition-colors font-medium">
+            Sign in
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

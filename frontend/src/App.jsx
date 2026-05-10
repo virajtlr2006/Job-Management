@@ -16,9 +16,9 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-slate-950 text-slate-100">
+        <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans">
           <Navbar />
-          <main className="container mx-auto px-4 py-8">
+          <main className="mx-auto max-w-screen-xl px-6 py-12 lg:px-10">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/jobs" element={<Jobs />} />
@@ -30,7 +30,11 @@ function App() {
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </main>
-          <ToastContainer />
+          <ToastContainer
+            position="bottom-right"
+            theme="dark"
+            toastClassName="!bg-zinc-900 !border !border-zinc-800 !text-zinc-100 !rounded-2xl !text-sm"
+          />
         </div>
       </Router>
     </AuthProvider>
