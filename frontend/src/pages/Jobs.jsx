@@ -31,64 +31,64 @@ const Jobs = () => {
   );
 
   if (loading) {
-    return <div className="text-center">Loading jobs...</div>;
+    return <div className="text-center text-slate-300">Loading jobs...</div>;
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">Available Jobs</h1>
-        <input
-          type="text"
-          placeholder="Search jobs, companies, or locations..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {user && user.role === 'employer' && (
-          <div className="mt-4">
-            <Link
-              to="/create-job"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 inline-block"
-            >
+    <div className="max-w-6xl mx-auto">
+      <div className="surface-panel p-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-semibold text-white mb-2">Available Jobs</h1>
+            <p className="text-slate-400">Search roles, companies, and locations to find your next hire or career move.</p>
+          </div>
+          {user && user.role === 'employer' && (
+            <Link to="/create-job" className="btn-primary px-5 py-3">
               Create New Job
             </Link>
-          </div>
-        )}
+          )}
+        </div>
+
+        <div className="mt-6">
+          <input
+            type="text"
+            placeholder="Search jobs, companies, or locations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="input-field"
+          />
+        </div>
       </div>
 
       <div className="grid gap-6">
         {filteredJobs.map(job => (
-          <div key={job._id} className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex justify-between items-start mb-4">
+          <div key={job._id} className="surface-card p-6">
+            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">{job.title}</h2>
-                <p className="text-gray-600">{job.company}</p>
-                <p className="text-gray-500">{job.location}</p>
+                <h2 className="text-2xl font-semibold text-white">{job.title}</h2>
+                <p className="text-slate-400">{job.company}</p>
+                <p className="text-slate-500">{job.location}</p>
               </div>
-              <span className={`px-3 py-1 rounded-full text-sm ${
-                job.type === 'full-time' ? 'bg-green-100 text-green-800' :
-                job.type === 'part-time' ? 'bg-blue-100 text-blue-800' :
-                'bg-purple-100 text-purple-800'
+              <span className={`badge-status ${
+                job.type === 'full-time'
+                  ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/20'
+                  : job.type === 'part-time'
+                  ? 'bg-violet-500/10 text-violet-300 border border-violet-500/20'
+                  : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'
               }`}>
                 {job.type}
               </span>
             </div>
 
-            <p className="text-gray-700 mb-4 line-clamp-3">{job.description}</p>
+            <p className="text-slate-400 mb-4 line-clamp-3">{job.description}</p>
 
             {job.salary && (
-              <p className="text-green-600 font-semibold mb-4">{job.salary}</p>
+              <p className="text-cyan-300 font-semibold mb-4">{job.salary}</p>
             )}
 
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">
-                Posted by {job.postedBy.name}
-              </span>
-              <Link
-                to={`/jobs/${job._id}`}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <span className="text-sm text-slate-500">Posted by {job.postedBy.name}</span>
+              <Link to={`/jobs/${job._id}`} className="btn-secondary px-4 py-2">
                 View Details
               </Link>
             </div>
@@ -97,7 +97,7 @@ const Jobs = () => {
       </div>
 
       {filteredJobs.length === 0 && (
-        <div className="text-center text-gray-500 mt-8">
+        <div className="text-center text-slate-400 mt-8">
           No jobs found matching your search.
         </div>
       )}

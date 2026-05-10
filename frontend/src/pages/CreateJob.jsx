@@ -52,8 +52,8 @@ const CreateJob = () => {
 
   if (!user || user.role !== 'employer') {
     return (
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-red-500 mb-4">Access Denied</h1>
+      <div className="text-center text-slate-300">
+        <h1 className="text-2xl font-semibold text-rose-400 mb-4">Access Denied</h1>
         <p>Only employers can post jobs.</p>
       </div>
     );
@@ -61,52 +61,52 @@ const CreateJob = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Post a New Job</h1>
+      <h1 className="text-3xl font-semibold text-white mb-8">Post a New Job</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Job Title</label>
+      <form onSubmit={handleSubmit} className="surface-card p-8 space-y-6">
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Job Title</label>
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Company</label>
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Company</label>
           <input
             type="text"
             name="company"
             value={formData.company}
             onChange={handleChange}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Location</label>
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Location</label>
           <input
             type="text"
             name="location"
             value={formData.location}
             onChange={handleChange}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Job Type</label>
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Job Type</label>
           <select
             name="type"
             value={formData.type}
             onChange={handleChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           >
             <option value="full-time">Full Time</option>
             <option value="part-time">Part Time</option>
@@ -115,48 +115,48 @@ const CreateJob = () => {
           </select>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Salary (Optional)</label>
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Salary (Optional)</label>
           <input
             type="text"
             name="salary"
             value={formData.salary}
             onChange={handleChange}
             placeholder="e.g., $50,000 - $70,000 per year"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Job Description</label>
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Job Description</label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             required
             rows={6}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold mb-2">
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">
             Requirements (One per line)
           </label>
           <textarea
             name="requirements"
             value={formData.requirements}
             onChange={handleChange}
-            placeholder="Bachelor's degree in Computer Science&#10;3+ years of experience&#10;Proficiency in React"
+            placeholder="Bachelor's degree in Computer Science\n3+ years of experience\nProficiency in React"
             rows={4}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+          className="w-full btn-primary py-3 disabled:opacity-50"
         >
           {loading ? 'Posting Job...' : 'Post Job'}
         </button>

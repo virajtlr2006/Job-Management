@@ -37,45 +37,45 @@ const Login = () => {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-8">Login</h1>
+      <h1 className="text-3xl font-semibold text-white text-center mb-8">Login</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">Email</label>
+      <form onSubmit={handleSubmit} className="surface-card p-8 space-y-6">
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold mb-2">Password</label>
+        <div>
+          <label className="block text-slate-300 font-semibold mb-2">Password</label>
           <input
             type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input-field"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50"
+          className="w-full btn-primary py-3 disabled:opacity-50"
         >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
 
-      <p className="text-center mt-4">
+      <p className="text-center mt-4 text-slate-400">
         Don't have an account?{' '}
-        <Link to="/register" className="text-blue-600 hover:underline">
+        <Link to="/register" className="text-cyan-400 hover:text-cyan-300">
           Register here
         </Link>
       </p>

@@ -38,7 +38,7 @@ const JobDetails = () => {
     try {
       await axios.post(`/api/jobs/${id}/apply`);
       toast.success('Application submitted successfully!');
-      fetchJob(); // Refresh job data
+      fetchJob();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to apply');
     } finally {
@@ -53,78 +53,85 @@ const JobDetails = () => {
   });
 
   if (loading) {
-    return <div className="text-center">Loading job details...</div>;
+    return <div className="text-center text-slate-300">Loading job details...</div>;
   }
 
   if (!job) {
-    return <div className="text-center text-red-500">Job not found</div>;
+    return <div className="text-center text-red-400">Job not found</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{job.title}</h1>
-          <p className="text-xl text-gray-600 mb-2">{job.company}</p>
-          <p className="text-gray-500 mb-4">{job.location}</p>
+      <div className="surface-card p-8 space-y-8">
+        <div>
+          <h1 className="text-4xl font-semibold text-white mb-2">{job.title}</h1>
+          <p className="text-xl text-slate-300 mb-2">{job.company}</p>
+          <p className="text-slate-500 mb-4">{job.location}</p>
 
-          <div className="flex items-center space-x-4 mb-4">
-            <span className={`px-3 py-1 rounded-full text-sm ${
-              job.type === 'full-time' ? 'bg-green-100 text-green-800' :
-              job.type === 'part-time' ? 'bg-blue-100 text-blue-800' :
-              'bg-purple-100 text-purple-800'
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <span className={`badge-status ${
+              job.type === 'full-time'
+                ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/20'
+                : job.type === 'part-time'
+                ? 'bg-violet-500/10 text-violet-300 border border-violet-500/20'
+                : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'
             }`}>
               {job.type}
             </span>
-            <span className={`px-3 py-1 rounded-full text-sm ${
-              job.status === 'open' ? 'bg-green-100 text-green-800' :
-              job.status === 'closed' ? 'bg-red-100 text-red-800' :
-              'bg-yellow-100 text-yellow-800'
+            <span className={`badge-status ${
+              job.status === 'open'
+                ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20'
+                : job.status === 'closed'
+                ? 'bg-rose-500/10 text-rose-300 border border-rose-500/20'
+                : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'
             }`}>
               {job.status}
             </span>
           </div>
 
           {job.salary && (
-            <p className="text-2xl font-semibold text-green-600 mb-4">{job.salary}</p>
+            <p className="text-cyan-300 text-2xl font-semibold">{job.salary}</p>
           )}
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-3">Job Description</h2>
-          <p className="text-gray-700 whitespace-pre-line">{job.description}</p>
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-white mb-3">Job Description</h2>
+            <p className="text-slate-400 whitespace-pre-line">{job.description}</p>
+          </div>
+
+          {job.requirements && job.requirements.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-semibold text-white mb-3">Requirements</h2>
+              <ul className="list-disc list-inside text-slate-400 space-y-1">
+                {job.requirements.map((req, index) => (
+                  <li key={index}>{req}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
-        {job.requirements && job.requirements.length > 0 && (
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-3">Requirements</h2>
-            <ul className="list-disc list-inside text-gray-700 space-y-1">
-              {job.requirements.map((req, index) => (
-                <li key={index}>{req}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
         {currentUserId && ((job.postedBy?._id ? job.postedBy._id.toString() : job.postedBy?.toString()) === currentUserId) && job.applications && job.applications.length > 0 && (
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-3">Applications ({job.applications.length})</h2>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold text-white">Applications ({job.applications.length})</h2>
             <div className="space-y-3">
               {job.applications.map((application, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                  <div className="flex justify-between items-start">
+                <div key={index} className="surface-panel p-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                     <div>
-                      <p className="font-semibold text-gray-900">{application.user?.name || 'Unknown Applicant'}</p>
-                      <p className="text-sm text-gray-600">{application.user?.email || 'Email not available'}</p>
-                      <p className="text-sm text-gray-500">
+                      <p className="font-semibold text-white">{application.user?.name || 'Unknown Applicant'}</p>
+                      <p className="text-slate-400">{application.user?.email || 'Email not available'}</p>
+                      <p className="text-slate-500 text-sm mt-1">
                         Applied on {new Date(application.appliedAt).toLocaleDateString()}
                       </p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm ${
-                      application.status === 'applied' ? 'bg-blue-100 text-blue-800' :
-                      application.status === 'reviewed' ? 'bg-yellow-100 text-yellow-800' :
-                      application.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                      'bg-red-100 text-red-800'
+                    <span className={`badge-status ${
+                      application.status === 'applied'
+                        ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/20'
+                        : application.status === 'reviewed'
+                        ? 'bg-amber-500/10 text-amber-300 border border-amber-500/20'
+                        : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20'
                     }`}>
                       {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
                     </span>
@@ -135,8 +142,8 @@ const JobDetails = () => {
           </div>
         )}
 
-        <div className="flex justify-between items-center pt-6 border-t">
-          <div className="text-sm text-gray-500">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 pt-6 border-t border-slate-800">
+          <div className="text-sm text-slate-500">
             Posted by {job.postedBy.name} on {new Date(job.createdAt).toLocaleDateString()}
           </div>
 
@@ -144,10 +151,10 @@ const JobDetails = () => {
             <button
               onClick={handleApply}
               disabled={hasApplied || applying}
-              className={`px-6 py-3 rounded-lg font-semibold ${
+              className={`px-6 py-3 rounded-2xl font-semibold transition ${
                 hasApplied
-                  ? 'bg-gray-400 text-white cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                  : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
               }`}
             >
               {applying ? 'Applying...' : hasApplied ? 'Already Applied' : 'Apply Now'}

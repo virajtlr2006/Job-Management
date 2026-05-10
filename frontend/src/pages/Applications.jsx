@@ -32,18 +32,18 @@ const Applications = () => {
   };
 
   if (!user) {
-    return <div className="text-center">Please login to view your applications.</div>;
+    return <div className="text-center text-slate-300">Please login to view your applications.</div>;
   }
 
   if (loading) {
-    return <div className="text-center">Loading your applications...</div>;
+    return <div className="text-center text-slate-300">Loading your applications...</div>;
   }
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">My Applications</h1>
+      <h1 className="text-3xl font-semibold text-white mb-6">My Applications</h1>
       {jobs.length === 0 ? (
-        <div className="bg-white p-6 rounded-lg shadow-md text-gray-600">
+        <div className="surface-card p-6 text-slate-400">
           You have not applied to any jobs yet.
         </div>
       ) : (
@@ -51,15 +51,15 @@ const Applications = () => {
           {jobs.map((job) => {
             const application = getApplicationForJob(job);
             return (
-              <div key={job._id} className="bg-white p-6 rounded-lg shadow-md">
+              <div key={job._id} className="surface-card p-6">
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                   <div>
-                    <h2 className="text-2xl font-semibold text-gray-900">{job.title}</h2>
-                    <p className="text-gray-600">{job.company}</p>
-                    <p className="text-gray-500">{job.location}</p>
+                    <h2 className="text-2xl font-semibold text-white">{job.title}</h2>
+                    <p className="text-slate-400">{job.company}</p>
+                    <p className="text-slate-500">{job.location}</p>
                   </div>
                   <div className="text-right">
-                    <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                    <span className="badge-status bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
                       {job.type}
                     </span>
                   </div>
@@ -67,22 +67,22 @@ const Applications = () => {
 
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   <div>
-                    <p className="text-sm text-gray-600">Application status</p>
-                    <p className="mt-1 font-semibold text-gray-900">
+                    <p className="text-sm text-slate-500">Application status</p>
+                    <p className="mt-1 font-semibold text-white">
                       {application?.status ? application.status.charAt(0).toUpperCase() + application.status.slice(1) : 'Applied'}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Applied on</p>
-                    <p className="mt-1 font-semibold text-gray-900">
+                    <p className="text-sm text-slate-500">Applied on</p>
+                    <p className="mt-1 font-semibold text-white">
                       {application?.appliedAt ? new Date(application.appliedAt).toLocaleDateString() : 'Unknown'}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <h3 className="text-lg font-semibold mb-2">Job description</h3>
-                  <p className="text-gray-700 line-clamp-3">{job.description}</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">Job description</h3>
+                  <p className="text-slate-400 line-clamp-3">{job.description}</p>
                 </div>
               </div>
             );
